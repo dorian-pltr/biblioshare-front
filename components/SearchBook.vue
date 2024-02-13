@@ -1,6 +1,7 @@
 <script setup>
 const input = ref("");
 const books = ref([]);
+const foundBooksNumber = ref(-1);
 
 async function fetchBooks() {
   const response = await fetch(
@@ -8,11 +9,13 @@ async function fetchBooks() {
   );
   const data = await response.json();
   books.value = data.items || [];
+  foundBooksNumber.value = data.totalItems;
+  console.log(foundBooksNumber.value);
 }
 </script>
 
 <template>
-  <div class="mt-10">
+  <div class="m-10">
     <form
       class="flex flex-row justify-center gap-2 mb-10"
       @submit.prevent="fetchBooks"
@@ -35,7 +38,10 @@ async function fetchBooks() {
     <div v-for="book in books" :key="book.id" class="text-center">
       <p>{{ book.volumeInfo.title }}</p>
     </div>
-    <div v-if="input && !books.length" class="text-center text-red-600">
+    <div
+      v-if="input && foundBooksNumber === 0"
+      class="text-center text-red-600"
+    >
       <p>No books found!</p>
     </div>
   </div>

@@ -3,7 +3,7 @@ const year = ref(new Date().getFullYear());
 </script>
 
 <template>
-  <footer class="text-white bg-gray-700 px-4 py-5 absolute bottom-0 w-full">
+  <footer class="text-white bg-gray-700 px-4 py-5">
     <div class="text-center">
       <p class="text-lg font-bold">Share knowledge.</p>
       <p class="mt-4">
