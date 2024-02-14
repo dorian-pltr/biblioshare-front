@@ -1,15 +1,46 @@
 <script lang="ts" setup>
+import { format } from 'date-fns';
+import { type Book } from '../types/book';
+
 const input = ref('');
-const books = ref<any[]>([]);
+const books = ref<Array<Book>>([]);
 const foundBooksNumber = ref(-1);
+
+const sliceString = (str: string, length: number) => {
+  if (str.length <= length) {
+    return str;
+  }
+  return str.slice(0, length) + '...';
+};
 
 async function fetchBooks() {
   const response = await fetch(
     `https://www.googleapis.com/books/v1/volumes?q=${input.value}`,
   );
-  const data = await response.json();
-  books.value = data.items || [];
-  foundBooksNumber.value = data.totalItems;
+  const responseData = await response.json();
+  books.value = [];
+  foundBooksNumber.value = responseData.totalItems;
+  if (foundBooksNumber.value > 0) {
+    for (const data of responseData.items) {
+      if (data.volumeInfo.title && data.volumeInfo.imageLinks.thumbnail) {
+        books.value.push({
+          id: Math.random(),
+          img: data.volumeInfo.imageLinks.thumbnail ?? null,
+          title: sliceString(data.volumeInfo.title, 50),
+          authors: data.volumeInfo.authors
+            ? data.volumeInfo.authors.join(', ')
+            : null,
+          date: data.volumeInfo.publishedDate
+            ? format(new Date(data.volumeInfo.publishedDate), 'PPP')
+            : null,
+          desc: data.volumeInfo.description
+            ? sliceString(data.volumeInfo.description, 150)
+            : null,
+          language: data.volumeInfo.language ?? null,
+        });
+      }
+    }
+  }
 }
 </script>
 
@@ -34,11 +65,20 @@ async function fetchBooks() {
       </button>
     </form>
 
-    <div v-for="book in books" :key="book.id" class="text-center">
-      <p>{{ book.volumeInfo.title }}</p>
+    <div
+      v-if="input && foundBooksNumber > 0"
+      class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+    >
+      <article
+        v-for="book in books"
+        :key="book.id"
+        class="flex flex-col items-center justify-between gap-2 p-5 shadow-lg border rounded-md duration-300 hover:shadow-sm"
+      >
+        <BookCard :book="book" />
+      </article>
     </div>
     <div
-      v-if="input && foundBooksNumber === 0"
+      v-else-if="input && foundBooksNumber === 0"
       class="text-center text-red-600"
     >
       <p>No books found!</p>

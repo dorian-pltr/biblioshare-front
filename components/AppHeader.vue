@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const open = ref(false);
+const open = ref<boolean>(false);
 const navigation = [{ title: 'Home', router: '/', id: 1 }];
 function menuOpen() {
   open.value = !open.value;
