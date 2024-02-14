@@ -1,16 +1,15 @@
-<script setup>
-const input = ref("");
-const books = ref([]);
+<script lang="ts" setup>
+const input = ref('');
+const books = ref<any[]>([]);
 const foundBooksNumber = ref(-1);
 
 async function fetchBooks() {
   const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${input.value}`
+    `https://www.googleapis.com/books/v1/volumes?q=${input.value}`,
   );
   const data = await response.json();
   books.value = data.items || [];
   foundBooksNumber.value = data.totalItems;
-  console.log(foundBooksNumber.value);
 }
 </script>
 

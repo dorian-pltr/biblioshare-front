@@ -1,6 +1,6 @@
-<script setup>
+<script lang="ts" setup>
 const open = ref(false);
-const navigation = [{ title: "Home", router: "/" }];
+const navigation = [{ title: 'Home', router: '/', id: 1 }];
 function menuOpen() {
   open.value = !open.value;
 }
