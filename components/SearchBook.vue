@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { format } from 'date-fns';
+import noBookCover from '../assets/image/no-book-cover.jpg';
 import { type Book } from '../types/book';
 
-const input = ref('');
+const input = ref<string>('');
+const searchedBook = ref<string>('');
 const books = ref<Array<Book>>([]);
-const foundBooksNumber = ref(-1);
+const foundBooksNumber = ref<number>(-1);
+const currentPage = ref<number>(1);
 
 const sliceString = (str: string, length: number) => {
   if (str.length <= length) {
@@ -13,42 +16,55 @@ const sliceString = (str: string, length: number) => {
   return str.slice(0, length) + '...';
 };
 
-async function fetchBooks() {
+async function fetchBooks(newFetch: boolean = true) {
+  if (newFetch) {
+    currentPage.value = 1;
+  }
   const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${input.value}`,
+    `https://www.googleapis.com/books/v1/volumes?q=${searchedBook.value}&maxResults=12&startIndex=${currentPage.value - 1}`,
   );
   const responseData = await response.json();
   books.value = [];
-  foundBooksNumber.value = responseData.totalItems;
+  if (newFetch) {
+    foundBooksNumber.value = responseData.totalItems;
+  }
   if (foundBooksNumber.value > 0) {
     for (const data of responseData.items) {
-      if (data.volumeInfo.title && data.volumeInfo.imageLinks.thumbnail) {
-        books.value.push({
-          id: Math.random(),
-          img: data.volumeInfo.imageLinks.thumbnail ?? null,
-          title: sliceString(data.volumeInfo.title, 50),
-          authors: data.volumeInfo.authors
-            ? data.volumeInfo.authors.join(', ')
-            : null,
-          date: data.volumeInfo.publishedDate
-            ? format(new Date(data.volumeInfo.publishedDate), 'PPP')
-            : null,
-          desc: data.volumeInfo.description
-            ? sliceString(data.volumeInfo.description, 150)
-            : null,
-          language: data.volumeInfo.language ?? null,
-        });
-      }
+      books.value.push({
+        id: Math.random(),
+        img: data.volumeInfo.imageLinks?.thumbnail ?? noBookCover,
+        title: sliceString(data.volumeInfo.title, 50) ?? 'Unknown',
+        authors: data.volumeInfo.authors
+          ? data.volumeInfo.authors.join(', ')
+          : null,
+        date: data.volumeInfo.publishedDate
+          ? format(new Date(data.volumeInfo.publishedDate), 'PPP')
+          : null,
+        desc: data.volumeInfo.description
+          ? sliceString(data.volumeInfo.description, 150)
+          : null,
+        language: data.volumeInfo.language ?? null,
+      });
     }
   }
 }
+
+const updatePage = (newPage: number) => {
+  currentPage.value = newPage;
+  fetchBooks(false);
+};
+
+const submitForm = () => {
+  searchedBook.value = input.value;
+  fetchBooks();
+};
 </script>
 
 <template>
   <div class="m-10">
     <form
       class="flex flex-row justify-center gap-2 mb-10"
-      @submit.prevent="fetchBooks"
+      @submit.prevent="submitForm()"
     >
       <input
         v-model="input"
@@ -65,17 +81,21 @@ async function fetchBooks() {
       </button>
     </form>
 
-    <div
-      v-if="input && foundBooksNumber > 0"
-      class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
-    >
-      <article
-        v-for="book in books"
-        :key="book.id"
-        class="flex flex-col items-center justify-between gap-2 p-5 shadow-lg border rounded-md duration-300 hover:shadow-sm"
-      >
-        <BookCard :book="book" />
-      </article>
+    <div v-if="input && foundBooksNumber > 0">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <article
+          v-for="book in books"
+          :key="book.id"
+          class="flex flex-col items-center justify-between gap-2 p-5 shadow-lg border rounded-md duration-300 hover:shadow-sm"
+        >
+          <BookCard :book="book" />
+        </article>
+      </div>
+      <BooksListPagination
+        :found-books-number="foundBooksNumber"
+        :current-page="currentPage"
+        :update-page="updatePage"
+      />
     </div>
     <div
       v-else-if="input && foundBooksNumber === 0"

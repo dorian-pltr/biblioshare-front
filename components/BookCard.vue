@@ -15,7 +15,7 @@ const props = defineProps<{
     :src="props.book.img"
     loading="lazy"
     :alt="props.book.title"
-    class="w-auto max-h-100px rounded-t-md"
+    class="h-52 w-36"
   />
   <div class="flex flex-col items-center">
     <span v-if="props.book.authors" class="block text-gray-900">{{
