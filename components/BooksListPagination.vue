@@ -8,9 +8,9 @@ const props = defineProps<{
 const foundBooksNumber = ref(props.foundBooksNumber);
 const currentPage = ref(props.currentPage);
 const inactivePageStyle =
-  'px-3 py-2 rounded-lg duration-150 hover:text-indigo-600 hover:bg-indigo-50';
+  'px-3 py-2 rounded-lg duration-150 hover:text-teal-800 hover:bg-teal-50';
 const activePageStyle =
-  'px-3 py-2 rounded-lg duration-150 hover:text-indigo-600 hover:bg-indigo-50 bg-indigo-50 text-indigo-600 font-medium';
+  'px-3 py-2 rounded-lg duration-150 hover:text-teal-800 hover:bg-teal-50 bg-teal-50 text-teal-800 font-medium';
 
 const handlePageChange = (page: number) => {
   if (page > totalPages.value) {
@@ -43,7 +43,7 @@ const totalPages = computed(() => Math.round(foundBooksNumber.value / 9));
       aria-label="Pagination"
     >
       <a
-        class="hover:text-indigo-600 flex items-center gap-x-2"
+        class="hover:text-teal-800 flex items-center gap-x-2"
         @click="handlePageChange(currentPage - 1)"
       >
         <svg
@@ -144,7 +144,6 @@ const totalPages = computed(() => Math.round(foundBooksNumber.value / 9));
 
         <li class="text-sm">
           <a
-            class="px-3 py-2 rounded-lg duration-150 hover:text-indigo-600 hover:bg-indigo-50"
             :class="
               currentPage === totalPages ? activePageStyle : inactivePageStyle
             "
@@ -155,7 +154,7 @@ const totalPages = computed(() => Math.round(foundBooksNumber.value / 9));
         </li>
       </ul>
       <a
-        class="hover:text-indigo-600 flex items-center gap-x-2"
+        class="hover:text-teal-800 flex items-center gap-x-2"
         @click="handlePageChange(currentPage + 1)"
       >
         Next
