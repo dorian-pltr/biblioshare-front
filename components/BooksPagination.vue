@@ -12,6 +12,20 @@ const inactivePageStyle =
 const activePageStyle =
   'px-3 py-2 rounded-lg duration-150 hover:text-teal-800 hover:bg-teal-50 bg-teal-50 text-teal-800 font-medium';
 
+const scrollToSearchBar = () => {
+  const element = document.querySelector('.searchBar');
+  if (element) {
+    const elementOffset = 20;
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.scrollY - elementOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    });
+  }
+};
+
 const handlePageChange = (page: number) => {
   if (page > totalPages.value) {
     page = totalPages.value;
@@ -20,6 +34,7 @@ const handlePageChange = (page: number) => {
   }
   currentPage.value = page;
   props.updatePage(page);
+  scrollToSearchBar();
 };
 
 watch(

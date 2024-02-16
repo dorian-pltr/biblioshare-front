@@ -61,7 +61,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <div class="m-10">
+  <div class="m-10 searchBar">
     <form
       class="flex flex-row justify-center gap-2 mb-10"
       @submit.prevent="submitForm()"
@@ -71,7 +71,7 @@ const submitForm = () => {
         type="text"
         placeholder="Search a book..."
         required
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-3/6 ps-10 p-2"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg sm:w-3/6 w-5/6 ps-10 p-2"
       />
       <button
         type="submit"
