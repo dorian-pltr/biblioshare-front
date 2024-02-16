@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppHeader />
-    <SearchBook />
+    <BooksSearch />
     <AppFooter />
   </div>
 </template>

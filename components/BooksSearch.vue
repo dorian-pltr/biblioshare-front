@@ -91,7 +91,7 @@ const submitForm = () => {
           <BookCard :book="book" />
         </article>
       </div>
-      <BooksListPagination
+      <BooksPagination
         :found-books-number="foundBooksNumber"
         :current-page="currentPage"
         :update-page="updatePage"

@@ -39,11 +39,11 @@ const totalPages = computed(() => Math.round(foundBooksNumber.value / 9));
     class="max-w-screen-xl mx-auto mt-12 px-4 text-gray-600 md:px-8"
   >
     <div
-      class="hidden items-center justify-between sm:flex gap-1"
+      class="items-center justify-between flex flex-col md:flex-row gap-1"
       aria-label="Pagination"
     >
       <a
-        class="hover:text-teal-800 flex items-center gap-x-2"
+        class="hover:text-teal-800 flex items-center gap-x-2 invisible md:visible"
         @click="handlePageChange(currentPage - 1)"
       >
         <svg
@@ -154,7 +154,7 @@ const totalPages = computed(() => Math.round(foundBooksNumber.value / 9));
         </li>
       </ul>
       <a
-        class="hover:text-teal-800 flex items-center gap-x-2"
+        class="hover:text-teal-800 flex items-center gap-x-2 invisible md:visible"
         @click="handlePageChange(currentPage + 1)"
       >
         Next
@@ -172,17 +172,43 @@ const totalPages = computed(() => Math.round(foundBooksNumber.value / 9));
         </svg>
       </a>
     </div>
-    <!-- On mobile version -->
-    <div
-      class="flex items-center justify-between text-sm text-gray-600 font-medium sm:hidden"
-    >
-      <a class="px-4 py-2 border rounded-lg duration-150 hover:bg-gray-50"
-        >Previous</a
+    <div class="flex items-center justify-around visible md:invisible gap-5">
+      <a
+        class="hover:text-teal-800 flex items-center gap-x-2"
+        @click="handlePageChange(currentPage - 1)"
       >
-      <div class="font-medium">Page 1 of 9</div>
-      <a class="px-4 py-2 border rounded-lg duration-150 hover:bg-gray-50"
-        >Next</a
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Previous
+      </a>
+      <a
+        class="hover:text-teal-800 flex items-center gap-x-2"
+        @click="handlePageChange(currentPage + 1)"
       >
+        Next
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </a>
     </div>
   </div>
 </template>
